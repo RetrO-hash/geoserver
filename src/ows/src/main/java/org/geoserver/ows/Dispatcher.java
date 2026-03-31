@@ -561,6 +561,16 @@ public class Dispatcher extends AbstractController {
         Document dom = null;
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            try {
+                dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            } catch (Exception e) {
+                logger.log(Level.WARNING, "XML parser does not support XXE protection feature", e);
+            }
+            try {
+                dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            } catch (Exception e) {
+                logger.log(Level.WARNING, "XML parser does not support XXE protection feature", e);
+            }
             dbf.setNamespaceAware(true);
             DocumentBuilder db = dbf.newDocumentBuilder();
             Object provider = GeoServerExtensions.bean("entityResolverProvider");
