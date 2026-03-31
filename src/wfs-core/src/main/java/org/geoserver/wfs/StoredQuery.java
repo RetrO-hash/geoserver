@@ -121,6 +121,18 @@ public class StoredQuery {
         // parse into a QueryType object
         // TODO: use sax
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        try {
+            dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        } catch (Exception e) {
+            java.util.logging.Logger.getLogger("org.geoserver.wfs")
+                    .log(java.util.logging.Level.WARNING, "XML parser does not support XXE protection feature", e);
+        }
+        try {
+            dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        } catch (Exception e) {
+            java.util.logging.Logger.getLogger("org.geoserver.wfs")
+                    .log(java.util.logging.Level.WARNING, "XML parser does not support XXE protection feature", e);
+        }
 
         // do a non namespace aware parse... this is because we are only parsing part of the
         // document here (the query part), and it is unlikley that any namespace prefixes are
