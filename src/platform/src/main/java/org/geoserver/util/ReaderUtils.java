@@ -62,6 +62,13 @@ public class ReaderUtils {
     public static Element parse(Reader xml) {
         InputSource in = new InputSource(xml);
         DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        } catch (javax.xml.parsers.ParserConfigurationException e) {
+            LOGGER.log(Level.WARNING, "Failed to set XXE prevention features on DocumentBuilderFactory", e);
+            throw new RuntimeException("Failed to secure XML parser", e);
+        }
 
         dfactory.setNamespaceAware(false);
         dfactory.setValidating(false);
