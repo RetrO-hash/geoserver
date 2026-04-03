@@ -49,6 +49,14 @@ public class ReaderUtils {
         InputSource in = new InputSource(xml);
         DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
 
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        } catch (javax.xml.parsers.ParserConfigurationException e) {
+            LOGGER.log(Level.SEVERE, "Failed to configure DocumentBuilderFactory securely", e);
+            throw new RuntimeException(e);
+        }
+
         dfactory.setNamespaceAware(false);
         dfactory.setValidating(false);
         dfactory.setIgnoringComments(true);
