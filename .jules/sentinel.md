@@ -1,0 +1,4 @@
+## 2024-05-24 - DocumentBuilderFactory XXE Vulnerability
+**Vulnerability:** DocumentBuilderFactory instances were configured without disabling doctype declarations and external general entities, exposing the application to XML External Entity (XXE) vulnerabilities during parsing in `ReaderUtils.java`.
+**Learning:** Default XML parser configurations are typically insecure and fail to prevent external entity injection. Proper configuration to disable DOCTYPEs must be explicitly defined, and when parsing fails to secure, exceptions should be managed carefully to fail securely rather than continuing insecurely.
+**Prevention:** When using `DocumentBuilderFactory`, explicitly disable document type declarations (`http://apache.org/xml/features/disallow-doctype-decl`) and external entities. Wrap these features in a `try/catch`, logging any `ParserConfigurationException` and failing securely by throwing a `RuntimeException`.
