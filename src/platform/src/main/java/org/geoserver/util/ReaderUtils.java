@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.ConfigurationException;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Transformer;
@@ -68,6 +69,19 @@ public class ReaderUtils {
         dfactory.setIgnoringComments(true);
         dfactory.setCoalescing(true);
         dfactory.setIgnoringElementContentWhitespace(true);
+
+        try {
+            // Disallow doctype and external entities to prevent XXE
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            dfactory.setXIncludeAware(false);
+            dfactory.setExpandEntityReferences(false);
+        } catch (ParserConfigurationException e) {
+            LOGGER.log(Level.SEVERE, "Failed to configure DocumentBuilderFactory securely", e);
+            throw new RuntimeException("Failed to configure DocumentBuilderFactory securely", e);
+        }
 
         Document doc;
 
