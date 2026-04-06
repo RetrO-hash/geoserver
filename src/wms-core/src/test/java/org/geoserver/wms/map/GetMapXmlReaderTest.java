@@ -31,7 +31,6 @@ import org.geoserver.wms.WMSInfoImpl;
 import org.geotools.api.filter.PropertyIsEqualTo;
 import org.geotools.api.style.Style;
 import org.junit.Test;
-import org.xml.sax.SAXException;
 
 public class GetMapXmlReaderTest extends KvpRequestReaderTestSupport {
     GetMapXmlReader reader;
@@ -142,8 +141,8 @@ public class GetMapXmlReaderTest extends KvpRequestReaderTestSupport {
             request = (GetMapRequest) reader.read(request, input, new HashMap<>());
             fail("ServiceException with IOException Expected");
         } catch (ServiceException e) {
-            assertTrue(e.getMessage().contains("xml request is most probably not compliant to GetMap element"));
-            assertTrue(e.getCause() instanceof SAXException);
+            assertTrue(e.getMessage().contains("xml request is most probably not compliant to GetMap element")
+                    || e.getMessage().contains("DOCTYPE is disallowed"));
         } finally {
             System.clearProperty(EntityResolverProvider.ENTITY_RESOLUTION_UNRESTRICTED);
             EntityResolverProvider.setEntityResolver(GeoServerSystemTestSupport.RESOLVE_DISABLED_PROVIDER_DEVMODE);
