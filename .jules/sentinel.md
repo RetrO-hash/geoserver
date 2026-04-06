@@ -1,0 +1,4 @@
+## 2026-04-06 - [Prevent XXE in DocumentBuilderFactory]
+**Vulnerability:** DocumentBuilderFactory instances in XML parsers are susceptible to XML External Entity (XXE) injection attacks if not properly configured, as demonstrated in `GetMapXmlReader.java`.
+**Learning:** By default, XML parsers often allow external entities. We must explicitly disable `disallow-doctype-decl`, `external-general-entities`, `external-parameter-entities`, and `load-external-dtd`.
+**Prevention:** Always configure `DocumentBuilderFactory` securely by setting these features. Catch `ParserConfigurationException`, log it, and throw a `RuntimeException` to fail securely and not bypass XML parsing completely in an insecure way.

@@ -174,6 +174,16 @@ public class GetMapXmlReader extends org.geoserver.ows.XmlRequestReader {
 
             javax.xml.parsers.DocumentBuilderFactory dbf = javax.xml.parsers.DocumentBuilderFactory.newInstance();
 
+            try {
+                dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+                dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (javax.xml.parsers.ParserConfigurationException e) {
+                LOGGER.log(Level.SEVERE, "Failed to configure secure XML parser", e);
+                throw new RuntimeException("Failed to configure secure XML parser", e);
+            }
+
             dbf.setExpandEntityReferences(false);
             dbf.setValidating(false);
             dbf.setNamespaceAware(true);
