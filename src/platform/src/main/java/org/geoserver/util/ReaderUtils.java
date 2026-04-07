@@ -68,6 +68,15 @@ public class ReaderUtils {
         dfactory.setIgnoringComments(true);
         dfactory.setCoalescing(true);
         dfactory.setIgnoringElementContentWhitespace(true);
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        } catch (javax.xml.parsers.ParserConfigurationException e) {
+            LOGGER.log(Level.SEVERE, "Failed to configure secure XML parsing", e);
+            throw new RuntimeException("Failed to configure secure XML parsing", e);
+        }
 
         Document doc;
 
