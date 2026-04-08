@@ -1,0 +1,4 @@
+## 2026-04-08 - Secure DocumentBuilderFactory XXE Prevention
+**Vulnerability:** Found `DocumentBuilderFactory.newInstance()` configurations missing external entity disablement, risking XML External Entity (XXE) attacks when parsing untrusted XML.
+**Learning:** `org.geoserver.catalog.util.ReaderUtils` and `org.geoserver.util.ReaderUtils` in `src/main` and `src/platform` respectively lacked standard XXE mitigations (`disallow-doctype-decl`, `external-general-entities`, `external-parameter-entities`, `load-external-dtd`). These classes parse potentially untrusted XML streams for configuration and processing.
+**Prevention:** Always configure `DocumentBuilderFactory` securely by disabling DOCTYPE declarations and external entities when initialized. Catch `ParserConfigurationException` and throw a secure `RuntimeException` after logging to ensure failures are secure and visible.
