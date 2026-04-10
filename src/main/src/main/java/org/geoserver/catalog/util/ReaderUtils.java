@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.ConfigurationException;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -54,6 +55,18 @@ public class ReaderUtils {
         dfactory.setIgnoringComments(true);
         dfactory.setCoalescing(true);
         dfactory.setIgnoringElementContentWhitespace(true);
+
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            dfactory.setXIncludeAware(false);
+            dfactory.setExpandEntityReferences(false);
+        } catch (ParserConfigurationException e) {
+            LOGGER.log(Level.SEVERE, "Failed to configure secure XML parser", e);
+            throw new RuntimeException("Failed to configure secure XML parser", e);
+        }
 
         Document doc;
 
