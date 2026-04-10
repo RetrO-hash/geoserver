@@ -70,11 +70,13 @@
     </dependency>
     <dependency>
       <groupId>org.geotools.jdbc</groupId>
+      <version>${gt.version}</version>
       <artifactId>gt-jdbc-h2</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.geotools.jdbc</groupId>
+      <version>${gt.version}</version>
       <artifactId>gt-jdbc-postgis</artifactId>
       <scope>test</scope>
     </dependency>
