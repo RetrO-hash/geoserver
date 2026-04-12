@@ -1,0 +1,4 @@
+## 2024-04-12 - Prevent XXE Vulnerability in XML Parsing
+**Vulnerability:** XML External Entity (XXE) injection was possible because `DocumentBuilderFactory` in `org.geoserver.util.ReaderUtils` and `org.geoserver.catalog.util.ReaderUtils` lacked proper secure configuration to disable external entities and DTDs.
+**Learning:** `DocumentBuilderFactory.newInstance()` needs to be explicitly configured using `setFeature` to disable document type declarations, external general entities, external parameter entities, and load-external-dtd to prevent XXE. Otherwise, the parser will automatically process external inputs, which could lead to file disclosure.
+**Prevention:** Always harden XML parsers by calling `setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)` and disabling external entities. Catch and log configuration exceptions, and explicitly fail securely.
