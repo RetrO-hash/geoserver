@@ -69,6 +69,16 @@ public class ReaderUtils {
         dfactory.setCoalescing(true);
         dfactory.setIgnoringElementContentWhitespace(true);
 
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        } catch (javax.xml.parsers.ParserConfigurationException e) {
+            LOGGER.log(Level.SEVERE, "Failed to configure DocumentBuilderFactory for secure XML processing", e);
+            throw new RuntimeException(e);
+        }
+
         Document doc;
 
         try {
@@ -572,8 +582,20 @@ public class ReaderUtils {
             // ahhh... xml in java....
             SAXParserFactory sf = SAXParserFactory.newInstance();
             sf.setNamespaceAware(true);
+            sf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            sf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            sf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
             sf.setValidating(true);
+            try {
+                sf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (Exception e) {
+                // Ignore if not supported
+            }
             SAXParser parser = sf.newSAXParser();
+
+            parser.setProperty("http://javax.xml.XMLConstants/property/accessExternalDTD", "");
+            parser.setProperty("http://javax.xml.XMLConstants/property/accessExternalSchema", "");
+
             parser.setProperty(
                     "http://java.sun.com/xml/jaxp/properties/schemaLanguage", "http://www.w3.org/2001/XMLSchema");
 
