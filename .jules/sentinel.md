@@ -1,0 +1,4 @@
+## 2026-04-19 - Insecure XML Parser Configurations
+**Vulnerability:** DocumentBuilderFactory and SAXParserFactory instances in ReaderUtils utility classes were missing secure configurations, rendering them vulnerable to XML External Entity (XXE) attacks when parsing un-trusted XML input.
+**Learning:** In this codebase, XML processing utilities like ReaderUtils have historically lacked robust protection against entity expansion. Simply turning off validation does not prevent external entities from being resolved if DTDs or external entities aren't explicitly disabled.
+**Prevention:** Always configure DocumentBuilderFactory and SAXParserFactory with features that explicitly disable `disallow-doctype-decl`, `external-general-entities`, `external-parameter-entities`, and `load-external-dtd`. Catch initialization exceptions, log them appropriately, and throw RuntimeExceptions to fail securely instead of falling back to default, insecure settings.
