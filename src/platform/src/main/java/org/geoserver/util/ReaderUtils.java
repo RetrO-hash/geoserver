@@ -63,6 +63,18 @@ public class ReaderUtils {
         InputSource in = new InputSource(xml);
         DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
 
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            dfactory.setXIncludeAware(false);
+            dfactory.setExpandEntityReferences(false);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to configure DocumentBuilderFactory for secure XML parsing", e);
+            throw new RuntimeException("Failed to configure DocumentBuilderFactory for secure XML parsing", e);
+        }
+
         dfactory.setNamespaceAware(false);
         dfactory.setValidating(false);
         dfactory.setIgnoringComments(true);
@@ -571,6 +583,16 @@ public class ReaderUtils {
             // TODO: pretty sure this doesn't actually do validation
             // ahhh... xml in java....
             SAXParserFactory sf = SAXParserFactory.newInstance();
+            try {
+                sf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+                sf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                sf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                sf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Failed to configure SAXParserFactory for secure XML parsing", e);
+                throw new RuntimeException("Failed to configure SAXParserFactory for secure XML parsing", e);
+            }
+
             sf.setNamespaceAware(true);
             sf.setValidating(true);
             SAXParser parser = sf.newSAXParser();
