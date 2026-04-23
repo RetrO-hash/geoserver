@@ -1,0 +1,4 @@
+## 2026-04-23 - Prevent XXE via ReaderUtils
+**Vulnerability:** XML External Entity (XXE) vulnerabilities found in `ReaderUtils` because `DocumentBuilderFactory` and `SAXParserFactory` instantiations were not securely configured to disable external entities.
+**Learning:** Whenever instantiating `DocumentBuilderFactory` or `SAXParserFactory` for XML parsing, explicitly setting features to disallow doctype declarations, external general entities, external parameter entities, and loading of external DTDs is required to block malicious external inputs that can cause Server-Side Request Forgery or local file disclosure.
+**Prevention:** Follow the established security pattern: disable external features explicitly on parsers. For `DocumentBuilderFactory`, also set `setXIncludeAware(false)` and `setExpandEntityReferences(false)`. Catch configuration exceptions, log them securely, and fail out cleanly.
