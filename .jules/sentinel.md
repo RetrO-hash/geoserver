@@ -1,0 +1,4 @@
+## 2026-04-24 - Secure DocumentBuilderFactory and SAXParserFactory for XML XXE Vulnerabilities
+**Vulnerability:** XML External Entity (XXE) vulnerabilities found in multiple locations creating DocumentBuilderFactory and SAXParserFactory without disabling doctype declarations, external general entities, external parameter entities, and external DTDs.
+**Learning:** XML parsers in Java natively expand external entities and allow external DTDs, which makes the parsers vulnerable to XXE when parsing untrusted XML inputs.
+**Prevention:** Always explicitly configure DocumentBuilderFactory and SAXParserFactory instances to prevent XXE by setting the following features: `http://apache.org/xml/features/disallow-doctype-decl` to true, and disabling `external-general-entities`, `external-parameter-entities`, and `load-external-dtd`. Also disable `XIncludeAware` and `ExpandEntityReferences` for `DocumentBuilderFactory`. Throw exceptions or fail securely upon failure.
