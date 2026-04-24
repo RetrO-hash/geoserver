@@ -84,6 +84,14 @@ public class XMLUserGroupStore extends AbstractUserGroupStore {
         DocumentBuilder builder = null;
         try {
             DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
+
+            fac.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            fac.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            fac.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            fac.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            fac.setXIncludeAware(false);
+            fac.setExpandEntityReferences(false);
+
             builder = fac.newDocumentBuilder();
         } catch (ParserConfigurationException e1) {
             throw new IOException(e1);
