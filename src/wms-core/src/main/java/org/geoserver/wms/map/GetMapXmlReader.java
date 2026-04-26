@@ -177,6 +177,17 @@ public class GetMapXmlReader extends org.geoserver.ows.XmlRequestReader {
             dbf.setExpandEntityReferences(false);
             dbf.setValidating(false);
             dbf.setNamespaceAware(true);
+            try {
+                dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+                dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+                dbf.setXIncludeAware(false);
+            } catch (Exception e) {
+                java.util.logging.Logger.getLogger("org.geoserver.wms")
+                        .log(java.util.logging.Level.WARNING, "Failed to configure DocumentBuilderFactory securely", e);
+                throw new RuntimeException("Failed to configure DocumentBuilderFactory securely", e);
+            }
 
             javax.xml.parsers.DocumentBuilder db = dbf.newDocumentBuilder();
             EntityResolver entityResolver = wms.getCatalog().getResourcePool().getEntityResolver();
