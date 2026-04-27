@@ -1,0 +1,4 @@
+## 2026-04-27 - Secure XML Parser Configuration (XXE Prevention)
+**Vulnerability:** XML External Entity (XXE) vulnerabilities found due to insecure default configuration of `DocumentBuilderFactory` and `SAXParserFactory` in `src/platform/src/main/java/org/geoserver/util/ReaderUtils.java`.
+**Learning:** Java's default XML parser configurations often allow external entities and DTDs. When dealing with XML utilities like `ReaderUtils`, it is critical to explicitly disable these features for all newly instantiated factories to prevent potential XXE attacks.
+**Prevention:** Always configure `DocumentBuilderFactory` and `SAXParserFactory` with features disabling DOCTYPE declarations (`http://apache.org/xml/features/disallow-doctype-decl`), external general/parameter entities, and load-external-dtd. Also, disable XInclude and ExpandEntityReferences for `DocumentBuilderFactory`. Wrap configuration in a try-catch to log and throw `RuntimeException` on failure.
