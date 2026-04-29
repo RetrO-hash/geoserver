@@ -28,6 +28,19 @@ public class RemoteDocumentReaderImpl implements RemoteDocumentReader {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setNamespaceAware(true);
+
+            try {
+                dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+                dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+                dbf.setXIncludeAware(false);
+                dbf.setExpandEntityReferences(false);
+            } catch (ParserConfigurationException e) {
+                LOGGER.log(Level.SEVERE, "Failed to securely configure DocumentBuilderFactory", e);
+                throw new RuntimeException("Failed to securely configure XML parser", e);
+            }
+
             try (InputStream stream = url.openStream()) {
                 DocumentBuilder db = dbf.newDocumentBuilder();
                 Document doc = db.parse(stream);
