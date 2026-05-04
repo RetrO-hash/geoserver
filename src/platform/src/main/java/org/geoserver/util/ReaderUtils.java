@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.ConfigurationException;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Transformer;
@@ -62,6 +63,18 @@ public class ReaderUtils {
     public static Element parse(Reader xml) {
         InputSource in = new InputSource(xml);
         DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
+
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            dfactory.setXIncludeAware(false);
+            dfactory.setExpandEntityReferences(false);
+        } catch (ParserConfigurationException e) {
+            LOGGER.log(Level.SEVERE, "Failed to configure DocumentBuilderFactory securely", e);
+            throw new RuntimeException("Failed to configure DocumentBuilderFactory securely", e);
+        }
 
         dfactory.setNamespaceAware(false);
         dfactory.setValidating(false);
@@ -571,6 +584,15 @@ public class ReaderUtils {
             // TODO: pretty sure this doesn't actually do validation
             // ahhh... xml in java....
             SAXParserFactory sf = SAXParserFactory.newInstance();
+            try {
+                sf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+                sf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                sf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                sf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Failed to configure SAXParserFactory securely", e);
+                throw new RuntimeException("Failed to configure SAXParserFactory securely", e);
+            }
             sf.setNamespaceAware(true);
             sf.setValidating(true);
             SAXParser parser = sf.newSAXParser();
