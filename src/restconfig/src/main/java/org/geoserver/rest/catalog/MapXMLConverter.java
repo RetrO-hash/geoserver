@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -47,6 +49,23 @@ public class MapXMLConverter extends BaseMessageConverter<Map<?, ?>> {
         return Map.class.isAssignableFrom(clazz) && !Properties.class.isAssignableFrom(clazz);
     }
 
+    private DocumentBuilderFactory getSecureDocumentBuilderFactory() {
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            factory.setXIncludeAware(false);
+            factory.setExpandEntityReferences(false);
+            return factory;
+        } catch (ParserConfigurationException e) {
+            Logger.getLogger(MapXMLConverter.class.getName())
+                    .log(Level.SEVERE, "Error configuring DocumentBuilderFactory", e);
+            throw new RuntimeException("Error configuring DocumentBuilderFactory", e);
+        }
+    }
+
     //
     // reading
     //
@@ -56,7 +75,7 @@ public class MapXMLConverter extends BaseMessageConverter<Map<?, ?>> {
 
         Document dom;
         try {
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilder builder = getSecureDocumentBuilderFactory().newDocumentBuilder();
             builder.setEntityResolver(catalog.getResourcePool().getEntityResolver());
             dom = builder.parse(inputMessage.getBody());
         } catch (SAXException | IOException | ParserConfigurationException e) {
@@ -76,7 +95,7 @@ public class MapXMLConverter extends BaseMessageConverter<Map<?, ?>> {
 
         Element root;
         try {
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilder builder = getSecureDocumentBuilderFactory().newDocumentBuilder();
             Document doc = builder.newDocument();
             root = doc.createElement(getMapName(map));
             doc.appendChild(root);
