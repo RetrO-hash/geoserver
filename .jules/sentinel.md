@@ -1,0 +1,4 @@
+## 2024-05-09 - Fix XXE Vulnerability in ReaderUtils
+**Vulnerability:** XML External Entity (XXE) injection was possible because `DocumentBuilderFactory` and `SAXParserFactory` instantiations in `ReaderUtils.java` were missing proper security configurations to prevent parsing external entities and DTDs.
+**Learning:** XML parsers must be explicitly configured to disallow DTD declarations and external entity resolution. Default parser configurations in Java are often vulnerable to XXE.
+**Prevention:** Always configure `DocumentBuilderFactory`, `SAXParserFactory`, and `XMLInputFactory` using established secure defaults, specifically setting `http://apache.org/xml/features/disallow-doctype-decl` to `true` and explicitly disabling external entities using `setFeature` and related methods (`setExpandEntityReferences(false)`, `setXIncludeAware(false)`). Catch and securely handle `ParserConfigurationException`.
