@@ -1,0 +1,4 @@
+## 2024-05-24 - Fix XXE vulnerability in ReaderUtils
+**Vulnerability:** XML External Entity (XXE) vulnerabilities in `org.geoserver.util.ReaderUtils`. Both `DocumentBuilderFactory` and `SAXParserFactory` were instantiated without disabling DTDs or external entities, which could allow arbitrary file reading or Server-Side Request Forgery (SSRF) when parsing un-trusted XML input.
+**Learning:** XML parsers in Java default to resolving external entities and DTDs. This must be explicitly disabled using `setFeature` to ensure secure parsing, especially in shared utility methods like `ReaderUtils.parse` and `ReaderUtils.validate`.
+**Prevention:** Always configure `DocumentBuilderFactory` and `SAXParserFactory` to disable DTD (`http://apache.org/xml/features/disallow-doctype-decl`), external general entities, external parameter entities, and load-external-dtd. Use secure coding patterns or centralized parser factories that have these features disabled by default.
