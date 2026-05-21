@@ -1,0 +1,4 @@
+## 2024-05-24 - Missing XXE Prevention in XML Parsing
+**Vulnerability:** Unsafe DocumentBuilderFactory configuration lacking XXE (XML External Entity) prevention features in src/ows/src/main/java/org/geoserver/ows/Dispatcher.java.
+**Learning:** Java's default XML parsers are vulnerable to XXE. All parsers must be explicitly configured to disable doctype declarations, external entities, and parameter entities to prevent data exfiltration or SSRF attacks.
+**Prevention:** Explicitly configure DocumentBuilderFactory with setFeature("http://apache.org/xml/features/disallow-doctype-decl", true), setFeature("http://xml.org/sax/features/external-general-entities", false), setFeature("http://xml.org/sax/features/external-parameter-entities", false), setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false), setXIncludeAware(false), and setExpandEntityReferences(false) when parsing XML.
