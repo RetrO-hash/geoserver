@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -33,10 +35,11 @@ import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 @Component
 public class MapXMLConverter extends BaseMessageConverter<Map<?, ?>> {
+
+    static final Logger LOGGER = Logger.getLogger(MapXMLConverter.class.getName());
 
     public MapXMLConverter() {
         super(MediaType.TEXT_XML, MediaType.APPLICATION_XML);
@@ -56,10 +59,18 @@ public class MapXMLConverter extends BaseMessageConverter<Map<?, ?>> {
 
         Document dom;
         try {
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            factory.setXIncludeAware(false);
+            factory.setExpandEntityReferences(false);
+            DocumentBuilder builder = factory.newDocumentBuilder();
             builder.setEntityResolver(catalog.getResourcePool().getEntityResolver());
             dom = builder.parse(inputMessage.getBody());
-        } catch (SAXException | IOException | ParserConfigurationException e) {
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error building document", e);
             throw new IOException("Error building document", e);
         }
         Element elem = dom.getDocumentElement();
