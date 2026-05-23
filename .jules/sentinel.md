@@ -1,0 +1,4 @@
+## 2024-05-24 - XXE Vulnerability in MapXMLConverter
+**Vulnerability:** DocumentBuilderFactory was used without disabling external entities, document type declarations, or external parameters when parsing untrusted XML inputs from HttpInputMessage in MapXMLConverter, leading to a critical XXE vulnerability.
+**Learning:** XML parsers default to allowing DTDs and external entities, which can be exploited for Local File Inclusion (LFI), SSRF, and Denial of Service (Billion Laughs) when parsing user-controlled XML.
+**Prevention:** Always explicitly configure DocumentBuilderFactory and SAXParserFactory with specific security features, including `http://apache.org/xml/features/disallow-doctype-decl` to true, and disabling external general/parameter entities, x-includes, and expand entity references.
