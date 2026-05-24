@@ -1,0 +1,4 @@
+## 2024-05-18 - Missing XXE Protection in XML Parsing
+**Vulnerability:** XML parsers created via `DocumentBuilderFactory.newInstance()` and `SAXParserFactory.newInstance()` in `ReaderUtils` do not disable DTDs, external entities, XInclude, or external parameter entities. This makes the application vulnerable to XML External Entity (XXE) injection attacks when parsing untrusted XML data.
+**Learning:** Default configurations of XML parsers in Java are generally insecure. DTDs and external entities must be explicitly disabled to prevent XXE.
+**Prevention:** Always configure `DocumentBuilderFactory` and `SAXParserFactory` with features like `http://apache.org/xml/features/disallow-doctype-decl`, `http://xml.org/sax/features/external-general-entities`, and `http://xml.org/sax/features/external-parameter-entities` set to `false`. Ensure `setXIncludeAware(false)` and `setExpandEntityReferences(false)` are used for `DocumentBuilderFactory`.

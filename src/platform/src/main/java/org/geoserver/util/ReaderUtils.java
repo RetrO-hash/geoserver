@@ -68,6 +68,17 @@ public class ReaderUtils {
         dfactory.setIgnoringComments(true);
         dfactory.setCoalescing(true);
         dfactory.setIgnoringElementContentWhitespace(true);
+        dfactory.setExpandEntityReferences(false);
+        dfactory.setXIncludeAware(false);
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Error configuring DocumentBuilderFactory for XXE protection", e);
+            throw new RuntimeException("Error configuring DocumentBuilderFactory for XXE protection", e);
+        }
 
         Document doc;
 
@@ -573,6 +584,17 @@ public class ReaderUtils {
             SAXParserFactory sf = SAXParserFactory.newInstance();
             sf.setNamespaceAware(true);
             sf.setValidating(true);
+
+            try {
+                sf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+                sf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                sf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                sf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error configuring SAXParserFactory for XXE protection", e);
+                throw new RuntimeException("Error configuring SAXParserFactory for XXE protection", e);
+            }
+
             SAXParser parser = sf.newSAXParser();
             parser.setProperty(
                     "http://java.sun.com/xml/jaxp/properties/schemaLanguage", "http://www.w3.org/2001/XMLSchema");
