@@ -562,6 +562,12 @@ public class Dispatcher extends AbstractController {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setNamespaceAware(true);
+            dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            dbf.setXIncludeAware(false);
+            dbf.setExpandEntityReferences(false);
             DocumentBuilder db = dbf.newDocumentBuilder();
             Object provider = GeoServerExtensions.bean("entityResolverProvider");
             if (provider != null && getEntityResolver != null) {
@@ -569,6 +575,7 @@ public class Dispatcher extends AbstractController {
             }
             dom = db.parse(httpRequest.getInputStream());
         } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error parsing SOAP request", e);
             throw new IOException("Error parsing SOAP request", e);
         }
 
