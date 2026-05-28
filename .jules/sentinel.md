@@ -1,0 +1,4 @@
+## 2026-05-28 - XXE vulnerability in XML configuration readers
+**Vulnerability:** XML External Entity (XXE) vulnerabilities existed in `DocumentBuilderFactory` and `SAXParserFactory` instantiations in `src/platform/src/main/java/org/geoserver/util/ReaderUtils.java`.
+**Learning:** `setFeature` configurations intended to disable XXE (like `disallow-doctype-decl`, `external-general-entities`, `external-parameter-entities`, and `load-external-dtd`) must be individually wrapped in their own `try-catch` blocks. If any feature fails to set and throws an exception, the remaining secure features would otherwise be skipped, leaving the XML parser vulnerable. Also, `setXIncludeAware(false)` and `setExpandEntityReferences(false)` must be used for DocumentBuilderFactory.
+**Prevention:** Always wrap each `setFeature` call on `DocumentBuilderFactory` or `SAXParserFactory` in a separate `try-catch` block when configuring security features for XML parsing.
