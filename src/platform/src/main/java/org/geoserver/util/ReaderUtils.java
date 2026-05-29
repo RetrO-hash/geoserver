@@ -63,6 +63,37 @@ public class ReaderUtils {
         InputSource in = new InputSource(xml);
         DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
 
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Cannot set disallow-doctype-decl feature on DocumentBuilderFactory", e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Cannot set external-general-entities feature on DocumentBuilderFactory", e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Cannot set external-parameter-entities feature on DocumentBuilderFactory", e);
+        }
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Cannot set load-external-dtd feature on DocumentBuilderFactory", e);
+        }
+        try {
+            dfactory.setXIncludeAware(false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Cannot set XIncludeAware on DocumentBuilderFactory", e);
+        }
+        try {
+            dfactory.setExpandEntityReferences(false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Cannot set ExpandEntityReferences on DocumentBuilderFactory", e);
+        }
+
         dfactory.setNamespaceAware(false);
         dfactory.setValidating(false);
         dfactory.setIgnoringComments(true);
