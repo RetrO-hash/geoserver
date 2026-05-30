@@ -68,6 +68,33 @@ public class ReaderUtils {
         dfactory.setIgnoringComments(true);
         dfactory.setCoalescing(true);
         dfactory.setIgnoringElementContentWhitespace(true);
+        dfactory.setExpandEntityReferences(false);
+        dfactory.setXIncludeAware(false);
+
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Error setting disallow-doctype-decl feature", e);
+            throw new RuntimeException("Error configuring DocumentBuilderFactory", e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Error setting external-general-entities feature", e);
+            throw new RuntimeException("Error configuring DocumentBuilderFactory", e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Error setting external-parameter-entities feature", e);
+            throw new RuntimeException("Error configuring DocumentBuilderFactory", e);
+        }
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Error setting load-external-dtd feature", e);
+            throw new RuntimeException("Error configuring DocumentBuilderFactory", e);
+        }
 
         Document doc;
 
