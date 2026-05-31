@@ -364,6 +364,30 @@ class WPSExecuteTransformer extends TransformerBase {
             try {
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 factory.setNamespaceAware(true);
+
+                try {
+                    factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+                } catch (Exception e) {
+                    LOGGER.log(Level.WARNING, "Cannot disable doctype declaration", e);
+                }
+                try {
+                    factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                } catch (Exception e) {
+                    LOGGER.log(Level.WARNING, "Cannot disable general entities", e);
+                }
+                try {
+                    factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                } catch (Exception e) {
+                    LOGGER.log(Level.WARNING, "Cannot disable parameter entities", e);
+                }
+                try {
+                    factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+                } catch (Exception e) {
+                    LOGGER.log(Level.WARNING, "Cannot disable external dtd", e);
+                }
+                factory.setXIncludeAware(false);
+                factory.setExpandEntityReferences(false);
+
                 DocumentBuilder builder = factory.newDocumentBuilder();
                 builder.setEntityResolver(entityResolver);
                 if (!data.startsWith("<?xml")) {
