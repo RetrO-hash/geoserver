@@ -8,6 +8,7 @@ package org.geoserver.wms.capabilities;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -53,6 +54,34 @@ public class CapabilitiesXmlReader extends XmlRequestReader {
         // read in XML file and parse to content handler
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
+            try {
+                factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            } catch (Exception e) {
+                Logger.getLogger(CapabilitiesXmlReader.class.getName())
+                        .log(Level.SEVERE, "Failed to set XML feature", e);
+                throw new ParserConfigurationException(e.getMessage());
+            }
+            try {
+                factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            } catch (Exception e) {
+                Logger.getLogger(CapabilitiesXmlReader.class.getName())
+                        .log(Level.SEVERE, "Failed to set XML feature", e);
+                throw new ParserConfigurationException(e.getMessage());
+            }
+            try {
+                factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            } catch (Exception e) {
+                Logger.getLogger(CapabilitiesXmlReader.class.getName())
+                        .log(Level.SEVERE, "Failed to set XML feature", e);
+                throw new ParserConfigurationException(e.getMessage());
+            }
+            try {
+                factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (Exception e) {
+                Logger.getLogger(CapabilitiesXmlReader.class.getName())
+                        .log(Level.SEVERE, "Failed to set XML feature", e);
+                throw new ParserConfigurationException(e.getMessage());
+            }
             SAXParser parser = factory.newSAXParser();
             ParserAdapter adapter = new ParserAdapter(parser.getParser());
             adapter.setEntityResolver(resolverProvider.getEntityResolver());
