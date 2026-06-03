@@ -49,6 +49,33 @@ public class ReaderUtils {
         InputSource in = new InputSource(xml);
         DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
 
+        dfactory.setXIncludeAware(false);
+        dfactory.setExpandEntityReferences(false);
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to set XML feature", e);
+            throw new RuntimeException(e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to set XML feature", e);
+            throw new RuntimeException(e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to set XML feature", e);
+            throw new RuntimeException(e);
+        }
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to set XML feature", e);
+            throw new RuntimeException(e);
+        }
+
         dfactory.setNamespaceAware(false);
         dfactory.setValidating(false);
         dfactory.setIgnoringComments(true);

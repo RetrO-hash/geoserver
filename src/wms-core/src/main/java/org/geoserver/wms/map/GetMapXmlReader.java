@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.parsers.ParserConfigurationException;
 import org.geoserver.catalog.LayerGroupInfo;
 import org.geoserver.catalog.LayerInfo;
 import org.geoserver.catalog.StyleInfo;
@@ -176,6 +177,31 @@ public class GetMapXmlReader extends org.geoserver.ows.XmlRequestReader {
 
             dbf.setExpandEntityReferences(false);
             dbf.setValidating(false);
+            dbf.setXIncludeAware(false);
+            try {
+                dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            } catch (ParserConfigurationException e) {
+                LOGGER.log(Level.SEVERE, "Failed to set XML feature", e);
+                throw new RuntimeException(e);
+            }
+            try {
+                dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            } catch (ParserConfigurationException e) {
+                LOGGER.log(Level.SEVERE, "Failed to set XML feature", e);
+                throw new RuntimeException(e);
+            }
+            try {
+                dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            } catch (ParserConfigurationException e) {
+                LOGGER.log(Level.SEVERE, "Failed to set XML feature", e);
+                throw new RuntimeException(e);
+            }
+            try {
+                dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (ParserConfigurationException e) {
+                LOGGER.log(Level.SEVERE, "Failed to set XML feature", e);
+                throw new RuntimeException(e);
+            }
             dbf.setNamespaceAware(true);
 
             javax.xml.parsers.DocumentBuilder db = dbf.newDocumentBuilder();
