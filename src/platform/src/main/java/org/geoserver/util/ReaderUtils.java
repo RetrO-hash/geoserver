@@ -63,6 +63,37 @@ public class ReaderUtils {
         InputSource in = new InputSource(xml);
         DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
 
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to disable doctype declarations for XML parser", e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to disable external general entities for XML parser", e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to disable external parameter entities for XML parser", e);
+        }
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to disable external DTDs for XML parser", e);
+        }
+        try {
+            dfactory.setXIncludeAware(false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to disable XInclude for XML parser", e);
+        }
+        try {
+            dfactory.setExpandEntityReferences(false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to disable expand entity references for XML parser", e);
+        }
+
         dfactory.setNamespaceAware(false);
         dfactory.setValidating(false);
         dfactory.setIgnoringComments(true);
@@ -571,6 +602,32 @@ public class ReaderUtils {
             // TODO: pretty sure this doesn't actually do validation
             // ahhh... xml in java....
             SAXParserFactory sf = SAXParserFactory.newInstance();
+            try {
+                sf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to disable doctype declarations for SAX parser", e);
+            }
+            try {
+                sf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to disable external general entities for SAX parser", e);
+            }
+            try {
+                sf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to disable external parameter entities for SAX parser", e);
+            }
+            try {
+                sf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to disable external DTDs for SAX parser", e);
+            }
+            try {
+                sf.setXIncludeAware(false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to disable XInclude for SAX parser", e);
+            }
+
             sf.setNamespaceAware(true);
             sf.setValidating(true);
             SAXParser parser = sf.newSAXParser();
