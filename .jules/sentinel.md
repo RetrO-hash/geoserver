@@ -1,0 +1,4 @@
+## 2024-05-24 - XML External Entity (XXE) Vulnerability in RemoteDocumentReaderImpl
+**Vulnerability:** `DocumentBuilderFactory` used to parse remote XML documents was not configured to disable DOCTYPE declarations, external general entities, or parameter entities, leading to potential XML External Entity (XXE) vulnerabilities.
+**Learning:** XML parsers must be explicitly configured to prevent XXE, as default configurations are often vulnerable. Wrapping each `setFeature` call in an individual `try-catch` block is necessary because some parsers may not support certain features, and failing securely on one feature shouldn't prevent others from being set.
+**Prevention:** Always disable `disallow-doctype-decl`, `external-general-entities`, `external-parameter-entities`, and `load-external-dtd` when using `DocumentBuilderFactory` or `SAXParserFactory`. Also ensure `setXIncludeAware(false)` and `setExpandEntityReferences(false)` are set.
