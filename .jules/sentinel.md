@@ -1,0 +1,4 @@
+## 2026-06-10 - Secure XML Parsing (XXE Prevention)
+**Vulnerability:** DocumentBuilderFactory was used to parse remote XML content without disabling DOCTYPE declarations or external entities, leading to potential XML External Entity (XXE) vulnerabilities.
+**Learning:** Each XML parser configuration setting (setFeature) must be wrapped in its own individual try-catch block, and multiple features (disallow-doctype-decl, external-general-entities, external-parameter-entities, load-external-dtd) along with setXIncludeAware(false) and setExpandEntityReferences(false) must be explicitly configured to ensure the parser securely handles untrusted input. Failing securely by throwing an IOException in catch blocks is essential.
+**Prevention:** Always follow the strict secure XML parser initialization pattern when using DocumentBuilderFactory or SAXParserFactory.
