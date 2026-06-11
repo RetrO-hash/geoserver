@@ -89,8 +89,14 @@ public class GeoserverDataDirectoryTest extends GeoServerSystemTestSupport {
             fail("Should have failed with a parse error");
         } catch (Exception e) {
             String message = e.getMessage();
-            assertThat(message, containsString("Entity resolution disallowed"));
-            assertThat(message, containsString("/this/file/does/not/exist"));
+            // It could fail either because entity resolution is disallowed (old message)
+            // or because DOCTYPE itself is disallowed (new message with disallow-doctype-decl feature enabled)
+            if (message.contains("DOCTYPE is disallowed")) {
+                assertThat(message, containsString("DOCTYPE is disallowed"));
+            } else {
+                assertThat(message, containsString("Entity resolution disallowed"));
+                assertThat(message, containsString("/this/file/does/not/exist"));
+            }
         }
     }
 }
