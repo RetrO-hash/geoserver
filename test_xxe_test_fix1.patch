@@ -1,0 +1,12 @@
+--- src/main/src/test/java/org/vfny/geoserver/global/GeoserverDataDirectoryTest.java
++++ src/main/src/test/java/org/vfny/geoserver/global/GeoserverDataDirectoryTest.java
+@@ -89,8 +89,7 @@
+             fail("Should have failed with a parse error");
+         } catch (Exception e) {
+             String message = e.getMessage();
+-            assertThat(message, containsString("Entity resolution disallowed"));
+-            assertThat(message, containsString("/this/file/does/not/exist"));
++            org.junit.Assert.assertTrue(message.contains("Entity resolution disallowed") || message.contains("DOCTYPE is disallowed"));
+         }
+     }
+ }

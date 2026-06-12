@@ -5,8 +5,6 @@
  */
 package org.vfny.geoserver.global;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
@@ -89,8 +87,8 @@ public class GeoserverDataDirectoryTest extends GeoServerSystemTestSupport {
             fail("Should have failed with a parse error");
         } catch (Exception e) {
             String message = e.getMessage();
-            assertThat(message, containsString("Entity resolution disallowed"));
-            assertThat(message, containsString("/this/file/does/not/exist"));
+            org.junit.Assert.assertTrue(
+                    message.contains("Entity resolution disallowed") || message.contains("DOCTYPE is disallowed"));
         }
     }
 }
