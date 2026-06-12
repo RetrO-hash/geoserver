@@ -1,0 +1,26 @@
+--- src/platform/src/main/java/org/geoserver/util/ReaderUtils.java
++++ src/platform/src/main/java/org/geoserver/util/ReaderUtils.java
+@@ -53,6 +53,12 @@
+         dfactory.setIgnoringComments(true);
+         dfactory.setCoalescing(true);
+         dfactory.setIgnoringElementContentWhitespace(true);
++        dfactory.setExpandEntityReferences(false);
++        dfactory.setXIncludeAware(false);
++        try { dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true); } catch (Exception e) { LOGGER.log(Level.WARNING, "Failed to set disallow-doctype-decl", e); }
++        try { dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false); } catch (Exception e) { LOGGER.log(Level.WARNING, "Failed to set external-general-entities", e); }
++        try { dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false); } catch (Exception e) { LOGGER.log(Level.WARNING, "Failed to set external-parameter-entities", e); }
++        try { dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false); } catch (Exception e) { LOGGER.log(Level.WARNING, "Failed to set load-external-dtd", e); }
+
+         Document doc;
+
+@@ -263,6 +269,10 @@
+             SAXParserFactory sf = SAXParserFactory.newInstance();
+             sf.setNamespaceAware(true);
+             sf.setValidating(true);
++            try { sf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true); } catch (Exception e) { LOGGER.log(Level.WARNING, "Failed to set disallow-doctype-decl", e); }
++            try { sf.setFeature("http://xml.org/sax/features/external-general-entities", false); } catch (Exception e) { LOGGER.log(Level.WARNING, "Failed to set external-general-entities", e); }
++            try { sf.setFeature("http://xml.org/sax/features/external-parameter-entities", false); } catch (Exception e) { LOGGER.log(Level.WARNING, "Failed to set external-parameter-entities", e); }
++            try { sf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false); } catch (Exception e) { LOGGER.log(Level.WARNING, "Failed to set load-external-dtd", e); }
+             SAXParser parser = sf.newSAXParser();
+             parser.setProperty(
+                     "http://java.sun.com/xml/jaxp/properties/schemaLanguage", "http://www.w3.org/2001/XMLSchema");

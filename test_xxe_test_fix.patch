@@ -1,0 +1,33 @@
+--- src/main/src/test/java/org/vfny/geoserver/global/GeoserverDataDirectoryTest.java
++++ src/main/src/test/java/org/vfny/geoserver/global/GeoserverDataDirectoryTest.java
+@@ -89,8 +89,8 @@
+             fail("Should have failed with a parse error");
+         } catch (Exception e) {
+             String message = e.getMessage();
+-            assertThat(message, containsString("Entity resolution disallowed"));
+-            assertThat(message, containsString("/this/file/does/not/exist"));
++            assertTrue(message.contains("Entity resolution disallowed") || message.contains("DOCTYPE is disallowed"));
+         }
+     }
+ }
+--- src/main/src/test/java/org/geoserver/catalog/ResourcePoolTest.java
++++ src/main/src/test/java/org/geoserver/catalog/ResourcePoolTest.java
+@@ -683,8 +683,7 @@
+             fail("Store creation should have failed to to XXE attack");
+         } catch (Exception e) {
+             String message = e.getMessage();
+-            assertThat(message, containsString("Entity resolution disallowed"));
+-            assertThat(message, containsString("file:///file/not/there"));
++            assertTrue(message.contains("Entity resolution disallowed") || message.contains("DOCTYPE is disallowed"));
+         }
+     }
+
+@@ -695,8 +694,7 @@
+             fail("Should have failed with a parse error");
+         } catch (Exception e) {
+             String message = e.getMessage();
+-            assertThat(message, containsString("Entity resolution disallowed"));
+-            assertThat(message, containsString("/this/file/does/not/exist"));
++            assertTrue(message.contains("Entity resolution disallowed") || message.contains("DOCTYPE is disallowed"));
+         }
+     }

@@ -1,0 +1,4 @@
+## 2026-06-12 - XXE Vulnerability in XML Utilities
+**Vulnerability:** XML External Entity (XXE) vulnerability in `ReaderUtils.java` due to missing security features in `DocumentBuilderFactory` and `SAXParserFactory`.
+**Learning:** XML parsers must be explicitly configured to disable DOCTYPE declarations, external general entities, and external parameter entities to prevent XXE attacks. Individual `try-catch` blocks must be used for each feature configuration to ensure partial security is applied even if one feature is unsupported by the parser implementation. Modifying the validation behavior may change the thrown exceptions (e.g., from "Entity resolution disallowed" to "DOCTYPE is disallowed"), requiring corresponding updates to test assertions.
+**Prevention:** Always enforce the `disallow-doctype-decl` feature along with other external entity features when configuring `DocumentBuilderFactory` and `SAXParserFactory`.

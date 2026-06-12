@@ -681,8 +681,8 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
             fail("Store creation should have failed to to XXE attack");
         } catch (Exception e) {
             String message = e.getMessage();
-            org.junit.Assert.assertTrue(
-                    message.contains("Entity resolution disallowed") || message.contains("DOCTYPE is disallowed"));
+            assertThat(message, containsString("Entity resolution disallowed"));
+            assertThat(message, containsString("file:///file/not/there"));
         }
     }
 
@@ -694,8 +694,8 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
             fail("Should have failed with a parse error");
         } catch (Exception e) {
             String message = e.getMessage();
-            org.junit.Assert.assertTrue(
-                    message.contains("Entity resolution disallowed") || message.contains("DOCTYPE is disallowed"));
+            assertThat(message, containsString("Entity resolution disallowed"));
+            assertThat(message, containsString("/this/file/does/not/exist"));
         }
     }
 
