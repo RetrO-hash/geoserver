@@ -63,6 +63,29 @@ public class ReaderUtils {
         InputSource in = new InputSource(xml);
         DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
 
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to set feature disallow-doctype-decl", e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to set feature external-general-entities", e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to set feature external-parameter-entities", e);
+        }
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to set feature load-external-dtd", e);
+        }
+        dfactory.setExpandEntityReferences(false);
+        dfactory.setXIncludeAware(false);
+
         dfactory.setNamespaceAware(false);
         dfactory.setValidating(false);
         dfactory.setIgnoringComments(true);
