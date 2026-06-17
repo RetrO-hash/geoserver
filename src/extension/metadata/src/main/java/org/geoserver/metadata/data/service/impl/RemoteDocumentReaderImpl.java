@@ -28,6 +28,32 @@ public class RemoteDocumentReaderImpl implements RemoteDocumentReader {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setNamespaceAware(true);
+            dbf.setExpandEntityReferences(false);
+            dbf.setXIncludeAware(false);
+            try {
+                dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error setting disallow-doctype-decl", e);
+                throw new IOException("Failed to set XXE protection", e);
+            }
+            try {
+                dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error setting external-general-entities", e);
+                throw new IOException("Failed to set XXE protection", e);
+            }
+            try {
+                dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error setting external-parameter-entities", e);
+                throw new IOException("Failed to set XXE protection", e);
+            }
+            try {
+                dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error setting load-external-dtd", e);
+                throw new IOException("Failed to set XXE protection", e);
+            }
             try (InputStream stream = url.openStream()) {
                 DocumentBuilder db = dbf.newDocumentBuilder();
                 Document doc = db.parse(stream);
