@@ -1,0 +1,4 @@
+## 2026-06-18 - Fix XXE in DocumentBuilderFactory
+**Vulnerability:** Remote XML documents were parsed using `DocumentBuilderFactory` without disabling external entity resolution or document type declarations, leading to potential XML External Entity (XXE) injection vulnerabilities.
+**Learning:** Default configurations for XML parsers like `DocumentBuilderFactory` are inherently insecure in Java. When configuring security features, each `setFeature` call must be wrapped in its own `try-catch` block so that unsupported features do not abort the configuration of remaining security features.
+**Prevention:** Always explicitly disable document type declarations (`disallow-doctype-decl`), external general/parameter entities, and `load-external-dtd`. Set `setExpandEntityReferences(false)` and `setXIncludeAware(false)`. Wrap each feature configuration in an individual `try-catch` block.
