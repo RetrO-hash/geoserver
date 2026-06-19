@@ -1,0 +1,4 @@
+## 2024-05-18 - Prevent XXE in ReaderUtils
+**Vulnerability:** XML External Entity (XXE) vulnerability due to unconfigured `DocumentBuilderFactory` and `SAXParserFactory` in `ReaderUtils.java`.
+**Learning:** When configuring XML parsers in Java, multiple features must be explicitly disabled to prevent XXE, and each must be wrapped in its own try-catch block to ensure failure in one feature does not skip the rest. Throwing an exception rather than just logging it is important to prevent bypassing the security checks if the features can't be set.
+**Prevention:** Always explicitly set features disabling DOCTYPE declarations, external general entities, external parameter entities, and load-external-dtd using individual try-catch blocks when creating `DocumentBuilderFactory` and `SAXParserFactory`. Explicitly throw a RuntimeException to fail securely.
