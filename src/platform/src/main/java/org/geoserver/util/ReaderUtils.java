@@ -63,6 +63,30 @@ public class ReaderUtils {
         InputSource in = new InputSource(xml);
         DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
 
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to set disallow-doctype-decl feature", e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to set external-general-entities feature", e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to set external-parameter-entities feature", e);
+        }
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to set load-external-dtd feature", e);
+        }
+
+        dfactory.setXIncludeAware(false);
+        dfactory.setExpandEntityReferences(false);
+
         dfactory.setNamespaceAware(false);
         dfactory.setValidating(false);
         dfactory.setIgnoringComments(true);
@@ -571,6 +595,28 @@ public class ReaderUtils {
             // TODO: pretty sure this doesn't actually do validation
             // ahhh... xml in java....
             SAXParserFactory sf = SAXParserFactory.newInstance();
+
+            try {
+                sf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to set disallow-doctype-decl feature", e);
+            }
+            try {
+                sf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to set external-general-entities feature", e);
+            }
+            try {
+                sf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to set external-parameter-entities feature", e);
+            }
+            try {
+                sf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to set load-external-dtd feature", e);
+            }
+
             sf.setNamespaceAware(true);
             sf.setValidating(true);
             SAXParser parser = sf.newSAXParser();
