@@ -68,6 +68,32 @@ public class ReaderUtils {
         dfactory.setIgnoringComments(true);
         dfactory.setCoalescing(true);
         dfactory.setIgnoringElementContentWhitespace(true);
+        dfactory.setExpandEntityReferences(false);
+        dfactory.setXIncludeAware(false);
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to disable doctype declaration", e);
+            throw new RuntimeException("Failed to configure DocumentBuilderFactory securely", e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to disable external general entities", e);
+            throw new RuntimeException("Failed to configure DocumentBuilderFactory securely", e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to disable external parameter entities", e);
+            throw new RuntimeException("Failed to configure DocumentBuilderFactory securely", e);
+        }
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to disable load-external-dtd", e);
+            throw new RuntimeException("Failed to configure DocumentBuilderFactory securely", e);
+        }
 
         Document doc;
 
@@ -573,6 +599,30 @@ public class ReaderUtils {
             SAXParserFactory sf = SAXParserFactory.newInstance();
             sf.setNamespaceAware(true);
             sf.setValidating(true);
+            try {
+                sf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to disable doctype declaration", e);
+                throw new RuntimeException("Failed to configure SAXParserFactory securely", e);
+            }
+            try {
+                sf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to disable external general entities", e);
+                throw new RuntimeException("Failed to configure SAXParserFactory securely", e);
+            }
+            try {
+                sf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to disable external parameter entities", e);
+                throw new RuntimeException("Failed to configure SAXParserFactory securely", e);
+            }
+            try {
+                sf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to disable load-external-dtd", e);
+                throw new RuntimeException("Failed to configure SAXParserFactory securely", e);
+            }
             SAXParser parser = sf.newSAXParser();
             parser.setProperty(
                     "http://java.sun.com/xml/jaxp/properties/schemaLanguage", "http://www.w3.org/2001/XMLSchema");
