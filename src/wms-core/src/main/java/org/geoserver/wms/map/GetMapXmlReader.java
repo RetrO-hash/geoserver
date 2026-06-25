@@ -173,6 +173,31 @@ public class GetMapXmlReader extends org.geoserver.ows.XmlRequestReader {
             }
 
             javax.xml.parsers.DocumentBuilderFactory dbf = javax.xml.parsers.DocumentBuilderFactory.newInstance();
+            try {
+                dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error", e);
+                throw new ServiceException(e);
+            }
+            try {
+                dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error", e);
+                throw new ServiceException(e);
+            }
+            try {
+                dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error", e);
+                throw new ServiceException(e);
+            }
+            try {
+                dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error", e);
+                throw new ServiceException(e);
+            }
+            dbf.setXIncludeAware(false);
 
             dbf.setExpandEntityReferences(false);
             dbf.setValidating(false);
