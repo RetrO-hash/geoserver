@@ -1,0 +1,4 @@
+## 2024-06-26 - Prevent XXE via DocumentBuilderFactory
+**Vulnerability:** DocumentBuilderFactory was used to parse XML without explicitly disabling DOCTYPE declarations and external entities, leading to potential XML External Entity (XXE) attacks.
+**Learning:** Even if `setValidating(false)` is set, external entities and DOCTYPE declarations can still be processed. Tests validating previous XXE mitigations might fail when a stricter measure like `disallow-doctype-decl` is implemented because the error message changes.
+**Prevention:** Explicitly disable DOCTYPE declarations (`http://apache.org/xml/features/disallow-doctype-decl`), external general entities, external parameter entities, and `load-external-dtd` when configuring `DocumentBuilderFactory`. Also set `setXIncludeAware(false)` and `setExpandEntityReferences(false)`.

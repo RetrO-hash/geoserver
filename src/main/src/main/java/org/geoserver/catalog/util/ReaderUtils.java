@@ -54,6 +54,34 @@ public class ReaderUtils {
         dfactory.setIgnoringComments(true);
         dfactory.setCoalescing(true);
         dfactory.setIgnoringElementContentWhitespace(true);
+        dfactory.setXIncludeAware(false);
+        dfactory.setExpandEntityReferences(false);
+
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Error setting http://apache.org/xml/features/disallow-doctype-decl", e);
+            throw new RuntimeException("Error securing XML parser", e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Error setting http://xml.org/sax/features/external-general-entities", e);
+            throw new RuntimeException("Error securing XML parser", e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Error setting http://xml.org/sax/features/external-parameter-entities", e);
+            throw new RuntimeException("Error securing XML parser", e);
+        }
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        } catch (Exception e) {
+            LOGGER.log(
+                    Level.WARNING, "Error setting http://apache.org/xml/features/nonvalidating/load-external-dtd", e);
+            throw new RuntimeException("Error securing XML parser", e);
+        }
 
         Document doc;
 
