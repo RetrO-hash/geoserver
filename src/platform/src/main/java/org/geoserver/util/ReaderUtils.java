@@ -69,6 +69,33 @@ public class ReaderUtils {
         dfactory.setCoalescing(true);
         dfactory.setIgnoringElementContentWhitespace(true);
 
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to disable DTDs", e);
+            throw new RuntimeException("Failed to disable DTDs", e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to disable external general entities", e);
+            throw new RuntimeException("Failed to disable external general entities", e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to disable external parameter entities", e);
+            throw new RuntimeException("Failed to disable external parameter entities", e);
+        }
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to disable load-external-dtd", e);
+            throw new RuntimeException("Failed to disable load-external-dtd", e);
+        }
+        dfactory.setXIncludeAware(false);
+        dfactory.setExpandEntityReferences(false);
+
         Document doc;
 
         try {
@@ -573,6 +600,32 @@ public class ReaderUtils {
             SAXParserFactory sf = SAXParserFactory.newInstance();
             sf.setNamespaceAware(true);
             sf.setValidating(true);
+
+            try {
+                sf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Failed to disable DTDs", e);
+                throw new RuntimeException("Failed to disable DTDs", e);
+            }
+            try {
+                sf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Failed to disable external general entities", e);
+                throw new RuntimeException("Failed to disable external general entities", e);
+            }
+            try {
+                sf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Failed to disable external parameter entities", e);
+                throw new RuntimeException("Failed to disable external parameter entities", e);
+            }
+            try {
+                sf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Failed to disable load-external-dtd", e);
+                throw new RuntimeException("Failed to disable load-external-dtd", e);
+            }
+
             SAXParser parser = sf.newSAXParser();
             parser.setProperty(
                     "http://java.sun.com/xml/jaxp/properties/schemaLanguage", "http://www.w3.org/2001/XMLSchema");
