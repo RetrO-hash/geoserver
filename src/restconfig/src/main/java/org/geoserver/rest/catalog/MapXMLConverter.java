@@ -56,7 +56,38 @@ public class MapXMLConverter extends BaseMessageConverter<Map<?, ?>> {
 
         Document dom;
         try {
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            try {
+                factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            } catch (Exception e) {
+                java.util.logging.Logger.getLogger(MapXMLConverter.class.getName())
+                        .log(java.util.logging.Level.SEVERE, "Failed to disable document type declarations", e);
+                throw new IOException("Failed to configure DocumentBuilderFactory securely", e);
+            }
+            try {
+                factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            } catch (Exception e) {
+                java.util.logging.Logger.getLogger(MapXMLConverter.class.getName())
+                        .log(java.util.logging.Level.SEVERE, "Failed to disable external general entities", e);
+                throw new IOException("Failed to configure DocumentBuilderFactory securely", e);
+            }
+            try {
+                factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            } catch (Exception e) {
+                java.util.logging.Logger.getLogger(MapXMLConverter.class.getName())
+                        .log(java.util.logging.Level.SEVERE, "Failed to disable external parameter entities", e);
+                throw new IOException("Failed to configure DocumentBuilderFactory securely", e);
+            }
+            try {
+                factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (Exception e) {
+                java.util.logging.Logger.getLogger(MapXMLConverter.class.getName())
+                        .log(java.util.logging.Level.SEVERE, "Failed to disable external DTDs", e);
+                throw new IOException("Failed to configure DocumentBuilderFactory securely", e);
+            }
+            factory.setXIncludeAware(false);
+            factory.setExpandEntityReferences(false);
+            DocumentBuilder builder = factory.newDocumentBuilder();
             builder.setEntityResolver(catalog.getResourcePool().getEntityResolver());
             dom = builder.parse(inputMessage.getBody());
         } catch (SAXException | IOException | ParserConfigurationException e) {
@@ -76,7 +107,38 @@ public class MapXMLConverter extends BaseMessageConverter<Map<?, ?>> {
 
         Element root;
         try {
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            try {
+                factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            } catch (Exception e) {
+                java.util.logging.Logger.getLogger(MapXMLConverter.class.getName())
+                        .log(java.util.logging.Level.SEVERE, "Failed to disable document type declarations", e);
+                throw new IOException("Failed to configure DocumentBuilderFactory securely", e);
+            }
+            try {
+                factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            } catch (Exception e) {
+                java.util.logging.Logger.getLogger(MapXMLConverter.class.getName())
+                        .log(java.util.logging.Level.SEVERE, "Failed to disable external general entities", e);
+                throw new IOException("Failed to configure DocumentBuilderFactory securely", e);
+            }
+            try {
+                factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            } catch (Exception e) {
+                java.util.logging.Logger.getLogger(MapXMLConverter.class.getName())
+                        .log(java.util.logging.Level.SEVERE, "Failed to disable external parameter entities", e);
+                throw new IOException("Failed to configure DocumentBuilderFactory securely", e);
+            }
+            try {
+                factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (Exception e) {
+                java.util.logging.Logger.getLogger(MapXMLConverter.class.getName())
+                        .log(java.util.logging.Level.SEVERE, "Failed to disable external DTDs", e);
+                throw new IOException("Failed to configure DocumentBuilderFactory securely", e);
+            }
+            factory.setXIncludeAware(false);
+            factory.setExpandEntityReferences(false);
+            DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.newDocument();
             root = doc.createElement(getMapName(map));
             doc.appendChild(root);
