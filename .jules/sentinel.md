@@ -1,0 +1,4 @@
+## 2024-07-03 - Fix XXE in MapXMLConverter
+**Vulnerability:** DocumentBuilderFactory was used without disabling DOCTYPE declarations, external general/parameter entities, or external DTDs, exposing the application to XML External Entity (XXE) attacks.
+**Learning:** The default configuration of DocumentBuilderFactory in Java allows the processing of external entities. If untrusted XML is parsed, it could lead to data exposure, SSRF, or denial of service.
+**Prevention:** Always explicitly configure DocumentBuilderFactory with `setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)`, disable external entities, and set `setXIncludeAware(false)` and `setExpandEntityReferences(false)`. Each setting should be securely wrapped in a try-catch block to fail-safe upon configuration error.
