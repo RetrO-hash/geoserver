@@ -27,6 +27,32 @@ public class RemoteDocumentReaderImpl implements RemoteDocumentReader {
     public Document readDocument(URL url) throws IOException {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            try {
+                dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to disable doctype declaration", e);
+                throw new IOException(e);
+            }
+            try {
+                dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to disable external general entities", e);
+                throw new IOException(e);
+            }
+            try {
+                dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to disable external parameter entities", e);
+                throw new IOException(e);
+            }
+            try {
+                dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to disable load external dtd", e);
+                throw new IOException(e);
+            }
+            dbf.setXIncludeAware(false);
+            dbf.setExpandEntityReferences(false);
             dbf.setNamespaceAware(true);
             try (InputStream stream = url.openStream()) {
                 DocumentBuilder db = dbf.newDocumentBuilder();
