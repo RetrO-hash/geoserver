@@ -69,6 +69,33 @@ public class ReaderUtils {
         dfactory.setCoalescing(true);
         dfactory.setIgnoringElementContentWhitespace(true);
 
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to set disallow-doctype-decl feature", e);
+            throw new RuntimeException(e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to set external-general-entities feature", e);
+            throw new RuntimeException(e);
+        }
+        try {
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to set external-parameter-entities feature", e);
+            throw new RuntimeException(e);
+        }
+        try {
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to set load-external-dtd feature", e);
+            throw new RuntimeException(e);
+        }
+        dfactory.setXIncludeAware(false);
+        dfactory.setExpandEntityReferences(false);
+
         Document doc;
 
         try {
@@ -573,6 +600,32 @@ public class ReaderUtils {
             SAXParserFactory sf = SAXParserFactory.newInstance();
             sf.setNamespaceAware(true);
             sf.setValidating(true);
+
+            try {
+                sf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to set disallow-doctype-decl feature", e);
+                throw new RuntimeException(e);
+            }
+            try {
+                sf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to set external-general-entities feature", e);
+                throw new RuntimeException(e);
+            }
+            try {
+                sf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to set external-parameter-entities feature", e);
+                throw new RuntimeException(e);
+            }
+            try {
+                sf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to set load-external-dtd feature", e);
+                throw new RuntimeException(e);
+            }
+
             SAXParser parser = sf.newSAXParser();
             parser.setProperty(
                     "http://java.sun.com/xml/jaxp/properties/schemaLanguage", "http://www.w3.org/2001/XMLSchema");
